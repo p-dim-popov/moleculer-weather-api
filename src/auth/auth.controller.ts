@@ -11,6 +11,7 @@ import {
 import { UsersService } from "../users/users.service";
 import { LocalAuthGuard } from "./local-auth.guard";
 import { AuthService } from "./auth.service";
+import { WannabeAuthUserDto } from "./wannabe-auth-user.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -21,21 +22,18 @@ export class AuthController {
 
     @UseGuards(LocalAuthGuard)
     @Post("login")
-    async login(@Request() req) {
+    async login(@Body() user: WannabeAuthUserDto, @Request() req) {
         return this.authService.login(req.user);
     }
 
     @HttpCode(HttpStatus.CREATED)
     @Post("register")
-    async register(
-        @Body("email") email: string,
-        @Body("password") password: string,
-    ) {
-        if (!email || !password) {
+    async register(@Body() user: WannabeAuthUserDto) {
+        if (!user.email || !user.password) {
             throw new HttpException("Invalid data", HttpStatus.BAD_REQUEST);
         }
 
-        const userExists = await this.usersService.existsByEmail(email);
+        const userExists = await this.usersService.existsByEmail(user.email);
         if (userExists) {
             throw new HttpException(
                 "Not Acceptable",
@@ -43,6 +41,6 @@ export class AuthController {
             );
         }
 
-        await this.usersService.create(email, password);
+        await this.usersService.create(user.email, user.password);
     }
 }
