@@ -1,0 +1,43 @@
+{{>error-list errors=errors}}
+
+<form method="POST">
+    <div class="form-group">
+        <label for="email">Email address</label>
+        <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                aria-describedby="emailHelp"
+                placeholder="Enter email"
+                required
+        >
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Password"
+                required
+        >
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="form-text text-muted">
+        <hr/>
+        <div class="container">
+            <div class="row">
+                <div class="col"></div>
+                <div class="col-auto">
+                    New member?
+                </div>
+                <div class="col-auto">
+                    <h5><a href="/register" class="badge badge-pill badge-light">Register now!</a></h5>
+                </div>
+                <div class="col"></div>
+            </div>
+        </div>
+    </div>
+</form>
