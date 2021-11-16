@@ -19,7 +19,7 @@ export class CookieJwtStrategy extends PassportStrategy(
         });
     }
 
-    async validate(payload: any): Promise<UserDto> {
+    async validate(payload: any): Promise<Partial<UserDto>> {
         return { id: payload.sub, email: payload.email };
     }
 }

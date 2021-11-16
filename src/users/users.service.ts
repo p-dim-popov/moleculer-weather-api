@@ -1,9 +1,10 @@
-import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, Type } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./users.entity";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
-import {WannabeAuthUserDto} from "../auth/wannabe-auth-user.dto";
+import { WannabeAuthUserDto } from "../auth/wannabe-auth-user.dto";
+import { Mapper } from "../utils/Mapper";
 
 @Injectable()
 export class UsersService {
@@ -12,21 +13,21 @@ export class UsersService {
         private usersRepository: Repository<User>,
     ) {}
 
-    findAll(): Promise<User[]> {
-        return this.usersRepository.find();
-    }
-
-    findOne(id: string): Promise<User> {
-        return this.usersRepository.findOne(id);
-    }
+    findOne =
+        <T>(type: Type<T | User> = User) =>
+        (id: string): Promise<T | User> =>
+            this.usersRepository.findOne(id).then(Mapper.mapTo(type));
 
     async remove(id: string): Promise<void> {
         await this.usersRepository.delete(id);
     }
 
-    async findOneByEmail(email: string) {
-        return this.usersRepository.findOne({ where: { email } });
-    }
+    findOneByEmail =
+        (mappedType = User) =>
+        (email: string) =>
+            this.usersRepository
+                .findOne({ where: { email } })
+                .then(Mapper.mapTo(mappedType));
 
     async existsByEmail(email: string): Promise<boolean> {
         const user = await this.usersRepository.findOne({

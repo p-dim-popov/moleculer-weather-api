@@ -2,8 +2,11 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class UserDto {
     @ApiProperty()
-    id: string;
+    id: string = undefined;
 
     @ApiProperty()
-    email: string;
+    email: string = undefined;
+
+    @ApiProperty()
+    locations: string[] = undefined;
 }

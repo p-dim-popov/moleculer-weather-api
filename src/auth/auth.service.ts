@@ -15,7 +15,7 @@ export class AuthService {
         email: string,
         password: string,
     ): Promise<UserDto | null> {
-        const user = await this.usersService.findOneByEmail(email);
+        const user = await this.usersService.findOneByEmail()(email);
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return null;
         }
