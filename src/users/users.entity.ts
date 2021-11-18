@@ -6,6 +6,7 @@ import {
     BeforeUpdate,
     AfterLoad,
 } from "typeorm";
+import { Locations } from "../locations/locations";
 
 @Entity()
 export class User {
@@ -26,11 +27,11 @@ export class User {
     @BeforeUpdate()
     @BeforeInsert()
     locationsSerialize() {
-        this.locations = this.locations.join(";") as unknown as string[];
+        this.locations = Locations.serialize(this.locations);
     }
 
     @AfterLoad()
     locationsDeserialize() {
-        this.locations = [...this.locations].join("").split(";");
+        this.locations = Locations.deserialize(this.locations);
     }
 }

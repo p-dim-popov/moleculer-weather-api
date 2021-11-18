@@ -17,7 +17,9 @@ import { CookieJwtAuthGuard } from "../auth/cookie-jwt-auth.guard";
 import { WannabeAuthUserDto } from "../auth/wannabe-auth-user.dto";
 import { RequireLoginFilter } from "../require-login.filter";
 import { UsersService } from "../users/users.service";
+import { ApiExcludeController } from "@nestjs/swagger";
 
+@ApiExcludeController()
 @Controller()
 export class MvcController {
     constructor(

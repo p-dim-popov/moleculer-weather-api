@@ -5,8 +5,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
 import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
-import { MvcController } from './mvc/mvc.controller';
-import { MvcModule } from './mvc/mvc.module';
+import { MvcModule } from "./mvc/mvc.module";
+import { LocationsModule } from "./locations/locations.module";
 import TypeOrmModuleConfig from "../ormconfig";
 
 @Module({
@@ -16,8 +16,9 @@ import TypeOrmModuleConfig from "../ormconfig";
         UsersModule,
         AuthModule,
         MvcModule,
+        LocationsModule,
     ],
-    controllers: [AppController, MvcController],
+    controllers: [AppController],
     providers: [AppService],
 })
 export class AppModule {}
