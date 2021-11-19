@@ -22,6 +22,9 @@ async function bootstrap() {
 
     const config = new DocumentBuilder()
         .setVersion(version)
+        .setDescription(
+            "EXPIRED jwt: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGxvY2FsaG9zdCIsInN1YiI6ImUyM2FmMjQ2LTYzZTMtNGExNy05MGVkLTc0Y2I5ZTFlNWIzOSIsImlhdCI6MTYzNzMzNzE0MywiZXhwIjoxNjM3MzM4MDQzfQ.0caIRtLfKPlUgjuGZ9hBQ_q4A6O4ejgMgWOEKMHuaa4",
+        )
         .addBearerAuth({
             description:
                 "Please enter token in following format: Bearer ${JWT}",

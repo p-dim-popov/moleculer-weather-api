@@ -26,8 +26,8 @@ export class LocationsController {
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Get("search/:location")
-    async search(@Param("location") location: string) {
-        return await this.locationsService.searchLocations(location);
+    async search(@Param("location") slug: string) {
+        return await this.locationsService.searchLocations(slug);
     }
 
     @ApiBearerAuth()
