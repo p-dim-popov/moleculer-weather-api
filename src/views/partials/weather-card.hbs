@@ -1,0 +1,27 @@
+<div class="d-flex justify-content-center align-items-center" data-object='{{{json this}}}'>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8 bg-primary">
+                    <h4 class="card-title">City: {{this.name}}</h4>
+                    <p class="card-text">Timezone:</p>
+                    <p class="card-text">{{{formatTzCode this.timezone "{{value}} ({{label}})"}}}</p>
+                    <h2 class="pb-0">{{this.main.temp}} ℃</h2>
+                </div>
+                <div class="col-md-4">
+                    {{#each this.weather}}
+                        <div class="d-flex flex-column align-items-center">
+                            <img
+                                    alt="current weather"
+                                    src="https://openweathermap.org/img/wn/{{this.icon}}@4x.png"
+                            />
+                            <p class="card-text">{{this.description}}</p>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/a076d05399.js" type="text/javascript"></script>
+
+</div>

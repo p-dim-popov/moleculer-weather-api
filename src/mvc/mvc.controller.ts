@@ -2,7 +2,6 @@ import {
     Body,
     Controller,
     Get,
-    HttpStatus,
     Post,
     Redirect,
     Render,
@@ -18,6 +17,7 @@ import { WannabeAuthUserDto } from "../auth/wannabe-auth-user.dto";
 import { RequireLoginFilter } from "../require-login.filter";
 import { UsersService } from "../users/users.service";
 import { ApiExcludeController } from "@nestjs/swagger";
+import { LocationsService } from "../locations/locations.service";
 
 @ApiExcludeController()
 @Controller()
@@ -25,20 +25,26 @@ export class MvcController {
     constructor(
         private authService: AuthService,
         private usersService: UsersService,
+        private locationsService: LocationsService,
     ) {}
 
     @Get(["/", "dashboard"])
     @UseGuards(CookieJwtAuthGuard)
     @UseFilters(RequireLoginFilter)
     @Render("home")
-    viewHome() {
-        return ["Weather data1", "Weather data2"];
+    async viewHome(@Req() req) {
+        const weather = await this.locationsService.findWeather(req.user.id);
+
+        return {
+            userEmail: req.user.email,
+            weather,
+        };
     }
 
     @Get("login")
     @Render("login")
     viewLogin() {
-        return {};
+        return;
     }
 
     @Post("login")
@@ -63,7 +69,7 @@ export class MvcController {
     @Get("register")
     @Render("register")
     viewRegister() {
-        return {};
+        return;
     }
 
     @Post("register")

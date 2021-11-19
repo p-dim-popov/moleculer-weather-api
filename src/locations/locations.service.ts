@@ -29,6 +29,7 @@ export class LocationsService {
                     this.httpService.get<LocationInfo>("/data/2.5/weather", {
                         params: {
                             q: location,
+                            units: "metric",
                         },
                     }),
                 ).then((value) => value.data),

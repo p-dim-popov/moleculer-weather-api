@@ -6,9 +6,21 @@ import * as path from "path";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import * as cookieParser from "cookie-parser";
 import { create } from "express-handlebars";
+import timezones from "./data/timezones";
 
 const hbs = create({
     extname: "hbs",
+    helpers: {
+        json: (context) => JSON.stringify(context),
+        formatTzCode: (code: number, format: string) => {
+            const timezone = timezones.find((x) => x.code === String(code));
+            return Object.entries(timezone).reduce(
+                (result, [key, value]) =>
+                    result.replace(new RegExp(`(\{\{${key}\}\})+`), value),
+                format,
+            );
+        },
+    },
 });
 
 async function bootstrap() {
