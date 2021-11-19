@@ -1,7 +1,25 @@
-<div>
-    Welcome, {{userEmail}}!
-
-    Here's your weather data:
-
-    {{> weather-list dataSource=weather}}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            Welcome, {{userEmail}}!
+        </div>
+        <div class="col-auto"></div>
+        <div class="col">
+            <a href="/logout" role="button" class="btn btn-danger">
+                Logout
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-auto">
+            <div class="row">
+                Here's your weather data:
+            </div>
+            <div class="row">
+                {{> weather-list dataSource=weather}}
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
 </div>
