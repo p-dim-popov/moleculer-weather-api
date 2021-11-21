@@ -6,7 +6,7 @@ import * as path from "path";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import * as cookieParser from "cookie-parser";
 import { create } from "express-handlebars";
-import timezones from "./data/timezones";
+import * as timezones from "./data/timezones.json";
 
 const hbs = create({
     extname: "hbs",
