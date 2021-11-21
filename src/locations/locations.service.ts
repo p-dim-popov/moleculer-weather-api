@@ -3,7 +3,7 @@ import { Repository } from "typeorm";
 import { User } from "../users/users.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as lodash from "lodash";
-import { ILocations } from "./locations";
+import Locations from "./locations";
 import { HttpService } from "@nestjs/axios";
 import { LocationInfo } from "../http/weather-api/interfaces/current-weather.response";
 import { firstValueFrom } from "rxjs";
@@ -57,13 +57,13 @@ export class LocationsService {
         return locations;
     }
 
-    async addLocations(locations: ILocations, userId: string) {
+    async addLocations(locations: Locations, userId: string) {
         const user = await this.usersRepository.findOne(userId);
         user.locations = [...new Set([...user.locations, ...locations])];
         await this.usersRepository.save(user);
     }
 
-    async deleteLocations(locations: ILocations, userId: string) {
+    async deleteLocations(locations: Locations, userId: string) {
         const user = await this.usersRepository.findOne(userId);
         user.locations = lodash.without(user.locations, ...locations);
         await this.usersRepository.save(user);

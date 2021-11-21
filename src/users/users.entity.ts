@@ -6,7 +6,7 @@ import {
     BeforeUpdate,
     AfterLoad,
 } from "typeorm";
-import { Locations } from "../locations/locations";
+import Locations from "../locations/locations";
 
 @Entity()
 export class User {
@@ -22,11 +22,12 @@ export class User {
     password: string = undefined;
 
     @Column("text")
-    locations: string[] = undefined;
+    locations: Locations = undefined;
 
     @BeforeUpdate()
     @BeforeInsert()
     locationsSerialize() {
+        // @ts-ignore
         this.locations = Locations.serialize(this.locations);
     }
 

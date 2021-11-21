@@ -1,6 +1,13 @@
-import { Controller, Get, Request, UseGuards } from "@nestjs/common";
+import {
+    Controller,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Request,
+    UseGuards,
+} from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
-import { ApiBearerAuth } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOkResponse } from "@nestjs/swagger";
 import { UsersService } from "./users.service";
 import { UserDto } from "./user.dto";
 
@@ -11,6 +18,8 @@ export class UsersController {
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Get("me")
+    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ type: UserDto })
     async getProfile(@Request() req) {
         return await this.usersService.findOne(UserDto)(req.user.id);
     }

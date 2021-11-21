@@ -1,24 +1,22 @@
-export type ILocations = string[];
+export default class Locations extends Array<string> {
+    static serialize = (locations: Locations): string => {
+        return (locations ?? [""]).join(";");
+    };
 
-export const Locations = {
-    serialize: (locations: ILocations) => {
-        return (locations ?? [""]).join(";") as unknown as string[];
-    },
-
-    deserialize: (locations: ILocations | string) => {
+    static deserialize = (locations: Locations | string): Locations => {
         if (Array.isArray(locations)) return locations;
 
         return locations.split(";").filter((x) => !!x);
-    },
+    };
 
-    getInvalid: (locations: ILocations) =>
-        locations.filter((l) => !l.includes(",")),
+    static Invalid = class {
+        constructor(public locations: Locations) {}
+    };
 
-    Invalid: class {
-        constructor(public locations: string[]) {}
-    },
+    static getInvalid = (locations: Locations): Locations =>
+        locations.filter((l) => !l.includes(","));
 
-    validate: (slug: ILocations | string): ILocations => {
+    static validate = (slug: Locations | string): Locations => {
         const locations = Locations.deserialize(slug);
         const invalidLocations = Locations.getInvalid(locations);
 
@@ -27,5 +25,5 @@ export const Locations = {
         }
 
         return locations;
-    },
-};
+    };
+}

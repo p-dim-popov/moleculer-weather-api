@@ -1,54 +1,89 @@
-export interface LocationInfo {
-    coord: Coord;
-    weather: Weather[];
-    base: string;
-    main: Main;
-    visibility: number;
-    wind: Wind;
-    clouds: Clouds;
-    dt: number;
-    sys: Sys;
-    timezone: number;
-    id: number;
-    name: string;
-    cod: number;
-}
+import { ApiProperty } from "@nestjs/swagger";
 
-export interface Clouds {
-    all: number;
-}
-
-export interface Coord {
+export class Coord {
+    @ApiProperty()
     lon: number;
+    @ApiProperty()
     lat: number;
 }
 
-export interface Main {
+export class Clouds {
+    @ApiProperty()
+    all: number;
+}
+
+export class Main {
+    @ApiProperty()
     temp: number;
+    @ApiProperty()
     feels_like: number;
+    @ApiProperty()
     temp_min: number;
+    @ApiProperty()
     temp_max: number;
+    @ApiProperty()
     pressure: number;
+    @ApiProperty()
     humidity: number;
 }
 
-export interface Sys {
+export class Sys {
+    @ApiProperty()
     type: number;
+    @ApiProperty()
     id: number;
+    @ApiProperty()
     message: number;
+    @ApiProperty()
     country: string;
+    @ApiProperty()
     sunrise: number;
+    @ApiProperty()
     sunset: number;
 }
 
-export interface Weather {
+export class Weather {
+    @ApiProperty()
     id: number;
+    @ApiProperty()
     main: string;
+    @ApiProperty()
     description: string;
+    @ApiProperty()
     icon: string;
 }
 
-export interface Wind {
+export class Wind {
+    @ApiProperty()
     speed: number;
+    @ApiProperty()
     deg: number;
+}
+
+export class LocationInfo {
+    @ApiProperty()
+    coord: Coord;
+    weather: Weather[];
+    @ApiProperty()
+    base: string;
+    @ApiProperty()
+    main: Main;
+    @ApiProperty()
+    visibility: number;
+    @ApiProperty()
+    wind: Wind;
+    @ApiProperty()
+    clouds: Clouds;
+    @ApiProperty()
+    dt: number;
+    @ApiProperty()
+    sys: Sys;
+    @ApiProperty()
+    timezone: number;
+    @ApiProperty()
+    id: number;
+    @ApiProperty()
+    name: string;
+    @ApiProperty()
+    cod: number;
 }

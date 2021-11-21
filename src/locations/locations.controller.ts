@@ -1,16 +1,21 @@
 import {
     Controller,
     Delete,
-    Get, HttpException, HttpStatus,
+    Get,
+    HttpCode,
+    HttpException,
+    HttpStatus,
     Param,
     Post,
     Req,
     UseGuards,
 } from "@nestjs/common";
-import { ApiBearerAuth } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOkResponse, ApiResponse } from "@nestjs/swagger";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { LocationsService } from "./locations.service";
-import { Locations } from "./locations";
+import Locations from "./locations";
+import { LocationInfo } from "../http/weather-api/interfaces/current-weather.response";
+import { PossibleLocation } from "../http/weather-api/interfaces/geocoding.response";
 
 @Controller("locations")
 export class LocationsController {
@@ -19,13 +24,17 @@ export class LocationsController {
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Get("weather")
-    async getWeatherForUserLocations(@Req() req) {
+    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ type: [LocationInfo] })
+    async getWeatherForUserLocations(@Req() req): Promise<LocationInfo[]> {
         return await this.locationsService.findWeather(req.user.id);
     }
 
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Get("search/:location")
+    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ type: [PossibleLocation] })
     async search(@Param("location") slug: string) {
         return await this.locationsService.searchLocations(slug);
     }
@@ -33,6 +42,8 @@ export class LocationsController {
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Get()
+    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ type: Locations })
     async viewUserLocations(@Req() req) {
         return await this.locationsService.findAllOfUser(req.user.id);
     }
@@ -40,6 +51,7 @@ export class LocationsController {
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Post(":locations")
+    @HttpCode(HttpStatus.NO_CONTENT)
     async addLocationsToUser(@Param("locations") slug: string, @Req() req) {
         try {
             const locations = Locations.validate(slug);
@@ -59,6 +71,7 @@ export class LocationsController {
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Delete(":locations")
+    @HttpCode(HttpStatus.NO_CONTENT)
     async deleteLocationsFromUser(
         @Param("locations") slug: string,
         @Req() req,
