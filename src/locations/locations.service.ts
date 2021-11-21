@@ -59,8 +59,24 @@ export class LocationsService {
 
     async patchLocations(locations: Location[], userId: string) {
         const user = await this.usersRepository.findOne(userId);
-        user.locations = [...new Set([...user.locations, ...locations])];
+        const newLocations = [...user.locations, ...locations].reduce<
+            Location[]
+        >((result, current) => {
+            const indexOfCurrentElement = result.findIndex(
+                Location.isEqual(current),
+            );
+
+            if (!~indexOfCurrentElement) {
+                result.push(current);
+            }
+
+            return result;
+        }, []);
+
+        user.locations = newLocations;
         await this.usersRepository.save(user);
+
+        return newLocations;
     }
 
     async putLocations(locations: Location[], userId: string) {

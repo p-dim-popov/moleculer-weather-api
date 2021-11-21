@@ -45,6 +45,14 @@ export default class Location {
         return `${self.city},${self.country}`;
     };
 
+    static isEqual = (locationToCompare: Location) => (self: Location) => {
+        return (
+            locationToCompare === self ||
+            (locationToCompare.city === self.city &&
+                locationToCompare.country === self.country)
+        );
+    };
+
     @ApiProperty()
     city: string = undefined;
     @ApiProperty()

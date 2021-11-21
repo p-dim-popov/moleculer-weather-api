@@ -6,8 +6,9 @@ import {
     HttpCode,
     HttpException,
     HttpStatus,
-    Param, Patch,
-    Post, Put,
+    Param,
+    Patch,
+    Put,
     Req,
     UseGuards,
 } from "@nestjs/common";
@@ -52,12 +53,16 @@ export class LocationsController {
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Patch(":locations")
-    @HttpCode(HttpStatus.NO_CONTENT)
+    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ type: [Location] })
     async patchUserLocations(@Param("locations") slug: string, @Req() req) {
         try {
             const locations = Location.deserialize(slug);
             Location.validate(locations);
-            await this.locationsService.patchLocations(locations, req.user.id);
+            return await this.locationsService.patchLocations(
+                locations,
+                req.user.id,
+            );
         } catch (error) {
             if (error instanceof Location.Invalid)
                 throw new HttpException(
