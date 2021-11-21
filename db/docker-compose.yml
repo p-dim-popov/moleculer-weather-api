@@ -1,0 +1,28 @@
+version: '3.1'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  db:
+    image: 'bitnami/mariadb:latest'
+    env_file:
+      - .env
+    volumes:
+      - './persist:/bitnami/mariadb'
+    ports:
+      - 6603:3306
+    networks: 
+      - app-tier
+
+
+  sql-client:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 734:80
+    environment:
+      - PMA_ARBITRARY=1
+    networks:
+      - app-tier

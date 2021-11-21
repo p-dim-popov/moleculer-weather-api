@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <h3>Welcome, {{userEmail}}!</h3>
+        <a href="/logout" role="button" class="btn btn-danger">Logout</a>
+    </div>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-auto">
+            <h4 class="row">
+                Here's your weather data:
+            </h4>
+            <div class="row">
+                {{> weather-list dataSource=weather}}
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
