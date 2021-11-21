@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import Locations from "../locations/locations";
+import Location from "../locations/location";
 
 export class UserDto {
     @ApiProperty()
@@ -8,6 +8,6 @@ export class UserDto {
     @ApiProperty()
     email: string = undefined;
 
-    @ApiProperty()
-    locations: Locations = undefined;
+    @ApiProperty({ type: Location })
+    locations: Location[] = undefined;
 }

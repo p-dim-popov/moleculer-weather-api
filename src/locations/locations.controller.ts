@@ -1,19 +1,20 @@
 import {
+    Body,
     Controller,
     Delete,
     Get,
     HttpCode,
     HttpException,
     HttpStatus,
-    Param,
-    Post,
+    Param, Patch,
+    Post, Put,
     Req,
     UseGuards,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiOkResponse, ApiResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOkResponse } from "@nestjs/swagger";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { LocationsService } from "./locations.service";
-import Locations from "./locations";
+import Location from "./location";
 import { LocationInfo } from "../http/weather-api/interfaces/current-weather.response";
 import { PossibleLocation } from "../http/weather-api/interfaces/geocoding.response";
 
@@ -43,21 +44,42 @@ export class LocationsController {
     @UseGuards(JwtAuthGuard)
     @Get()
     @HttpCode(HttpStatus.OK)
-    @ApiOkResponse({ type: Locations })
+    @ApiOkResponse({ type: [Location] })
     async viewUserLocations(@Req() req) {
         return await this.locationsService.findAllOfUser(req.user.id);
     }
 
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    @Post(":locations")
+    @Patch(":locations")
     @HttpCode(HttpStatus.NO_CONTENT)
-    async addLocationsToUser(@Param("locations") slug: string, @Req() req) {
+    async patchUserLocations(@Param("locations") slug: string, @Req() req) {
         try {
-            const locations = Locations.validate(slug);
-            await this.locationsService.addLocations(locations, req.user.id);
+            const locations = Location.deserialize(slug);
+            Location.validate(locations);
+            await this.locationsService.patchLocations(locations, req.user.id);
         } catch (error) {
-            if (error instanceof Locations.Invalid)
+            if (error instanceof Location.Invalid)
+                throw new HttpException(
+                    {
+                        info: "Invalid location/s",
+                        target: error.locations,
+                    },
+                    HttpStatus.BAD_REQUEST,
+                );
+        }
+    }
+
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @Put()
+    @HttpCode(HttpStatus.NO_CONTENT)
+    async putUserLocations(@Body() locations: Array<Location>, @Req() req) {
+        try {
+            Location.validate(locations);
+            await this.locationsService.patchLocations(locations, req.user.id);
+        } catch (error) {
+            if (error instanceof Location.Invalid)
                 throw new HttpException(
                     {
                         info: "Invalid location/s",
@@ -82,10 +104,11 @@ export class LocationsController {
         }
 
         try {
-            const locations = Locations.validate(slug);
+            const locations = Location.deserialize(slug);
+            Location.validate(locations);
             await this.locationsService.deleteLocations(locations, req.user.id);
         } catch (error) {
-            if (error instanceof Locations.Invalid)
+            if (error instanceof Location.Invalid)
                 throw new HttpException(
                     {
                         info: "Invalid location/s",

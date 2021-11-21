@@ -6,7 +6,7 @@ import {
     BeforeUpdate,
     AfterLoad,
 } from "typeorm";
-import Locations from "../locations/locations";
+import Location from "../locations/location";
 
 @Entity()
 export class User {
@@ -22,17 +22,19 @@ export class User {
     password: string = undefined;
 
     @Column("text")
-    locations: Locations = undefined;
+    locations: Location[] = undefined;
 
     @BeforeUpdate()
     @BeforeInsert()
     locationsSerialize() {
+        // noinspection UnnecessaryLocalVariableJS
+        const serialized = Location.serialize(this.locations);
         // @ts-ignore
-        this.locations = Locations.serialize(this.locations);
+        this.locations = serialized;
     }
 
     @AfterLoad()
     locationsDeserialize() {
-        this.locations = Locations.deserialize(this.locations);
+        this.locations = Location.deserialize(this.locations);
     }
 }
